@@ -42,6 +42,8 @@ pub enum CosmosMsg<T = Empty> {
     Wasm(WasmMsg),
     #[cfg(feature = "stargate")]
     Gov(GovMsg),
+    #[cfg(feature = "tokenfactory")]
+    TokenFactory(TokenFactoryMsg),
 }
 
 /// The message types of the bank module.
@@ -183,6 +185,33 @@ pub enum VoteOption {
     NoWithVeto,
 }
 
+#[cfg(feature = "tokenfactory")]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum TokenFactoryMsg {
+    /// This maps directly to [MsgCreateDenom](TODO: link)
+    CreateDenom {
+        nonce: String,
+    },
+    Mint {
+        amount: Coin,
+        mint_to_address: String,
+    },
+    Burn {
+        amount: Coin,
+        burn_from_address: String,
+    },
+    ForceTransfer {
+        amount: Coin,
+        transfer_from_address: String,
+        transfer_to_address: String,
+    },
+    ChangeAdmin {
+        denom: String,
+        new_admin: String,
+    },
+}
+
 /// Shortcut helper as the construction of WasmMsg::Instantiate can be quite verbose in contract code.
 ///
 /// When using this, `admin` is always unset. If you need more flexibility, create the message directly.
@@ -253,6 +282,13 @@ impl<T> From<IbcMsg> for CosmosMsg<T> {
 impl<T> From<GovMsg> for CosmosMsg<T> {
     fn from(msg: GovMsg) -> Self {
         CosmosMsg::Gov(msg)
+    }
+}
+
+#[cfg(feature = "tokenfactory")]
+impl<T> From<TokenFactoryMsg> for CosmosMsg<T> {
+    fn from(msg: TokenFactoryMsg) -> Self {
+        CosmosMsg::TokenFactory(msg)
     }
 }
 
