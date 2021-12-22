@@ -9,6 +9,7 @@ mod bank;
 mod ibc;
 mod staking;
 mod stargate;
+mod tokenfactory;
 mod wasm;
 
 pub use bank::{AllBalanceResponse, BalanceResponse, BankQuery};
@@ -21,6 +22,11 @@ pub use staking::{
 };
 #[cfg(feature = "stargate")]
 pub use stargate::StargateResponse;
+#[cfg(feature = "tokenfactory")]
+pub use tokenfactory::{
+    DenomAuthorityMetadata, DenomAuthorityMetadataResponse, DenomsFromCreatorResponse,
+    TokenFactoryQuery,
+};
 pub use wasm::{ContractInfoResponse, WasmQuery};
 
 #[non_exhaustive]
@@ -45,6 +51,8 @@ pub enum QueryRequest<C> {
     #[cfg(feature = "stargate")]
     Ibc(IbcQuery),
     Wasm(WasmQuery),
+    #[cfg(feature = "tokenfactory")]
+    TokenFactory(TokenFactoryQuery),
 }
 
 /// A trait that is required to avoid conflicts with other query types like BankQuery and WasmQuery
@@ -101,5 +109,12 @@ impl<C: CustomQuery> From<WasmQuery> for QueryRequest<C> {
 impl<C: CustomQuery> From<IbcQuery> for QueryRequest<C> {
     fn from(msg: IbcQuery) -> Self {
         QueryRequest::Ibc(msg)
+    }
+}
+
+#[cfg(feature = "tokenfactory")]
+impl<C: CustomQuery> From<TokenFactoryQuery> for QueryRequest<C> {
+    fn from(msg: TokenFactoryQuery) -> Self {
+        QueryRequest::TokenFactory(msg)
     }
 }

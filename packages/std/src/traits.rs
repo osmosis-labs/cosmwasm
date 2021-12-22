@@ -16,6 +16,11 @@ use crate::query::{
     AllDelegationsResponse, AllValidatorsResponse, BondedDenomResponse, Delegation,
     DelegationResponse, FullDelegation, StakingQuery, Validator, ValidatorResponse,
 };
+#[cfg(feature = "tokenfactory")]
+use crate::query::{
+    DenomAuthorityMetadata, DenomAuthorityMetadataResponse, DenomsFromCreatorResponse,
+    TokenFactoryQuery,
+};
 use crate::results::{ContractResult, Empty, SystemResult};
 use crate::serde::{from_binary, to_binary, to_vec};
 
@@ -315,6 +320,31 @@ impl<'a, C: CustomQuery> QuerierWrapper<'a, C> {
         .into();
         let res: DelegationResponse = self.query(&request)?;
         Ok(res.delegation)
+    }
+
+    #[cfg(feature = "tokenfactory")]
+    pub fn query_denom_authority_metadata(
+        &self,
+        denom: impl Into<String>,
+    ) -> StdResult<Option<DenomAuthorityMetadata>> {
+        let request = TokenFactoryQuery::DenomAuthorityMetadata {
+            denom: denom.into(),
+        }
+        .into();
+        let res: DenomAuthorityMetadataResponse = self.query(&request)?;
+        Ok(res.authority_metadata)
+    }
+    #[cfg(feature = "tokenfactory")]
+    pub fn query_denoms_from_creator(
+        &self,
+        creator: impl Into<String>,
+    ) -> StdResult<Option<Vec<String>>> {
+        let request = TokenFactoryQuery::DenomsFromCreator {
+            creator: creator.into(),
+        }
+        .into();
+        let res: DenomsFromCreatorResponse = self.query(&request)?;
+        Ok(res.denoms)
     }
 }
 

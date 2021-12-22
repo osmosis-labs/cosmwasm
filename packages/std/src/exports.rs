@@ -38,6 +38,10 @@ extern "C" fn requires_staking() -> () {}
 #[no_mangle]
 extern "C" fn requires_stargate() -> () {}
 
+#[cfg(feature = "tokenfactory")]
+#[no_mangle]
+extern "C" fn requires_tokenfactory() -> () {}
+
 /// interface_version_* exports mark which Wasm VM interface level this contract is compiled for.
 /// They can be checked by cosmwasm_vm.
 /// Update this whenever the Wasm VM interface breaks.

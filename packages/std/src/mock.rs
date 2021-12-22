@@ -23,6 +23,10 @@ use crate::query::{
     AllDelegationsResponse, AllValidatorsResponse, BondedDenomResponse, DelegationResponse,
     FullDelegation, StakingQuery, Validator, ValidatorResponse,
 };
+#[cfg(feature = "tokenfactory")]
+use crate::query::{
+    DenomAuthorityMetadata, DenomAuthorityMetadataResponse, DenomsFromCreatorResponse,
+};
 use crate::results::{ContractResult, Empty, SystemResult};
 use crate::serde::{from_slice, to_binary};
 use crate::storage::MemoryStorage;

@@ -57,6 +57,12 @@ pub use crate::query::{
 };
 #[cfg(feature = "stargate")]
 pub use crate::query::{ChannelResponse, IbcQuery, ListChannelsResponse, PortIdResponse};
+#[cfg(feature = "tokenfactory")]
+pub use crate::query::{
+    DenomAuthorityMetadata, DenomAuthorityMetadataResponse, DenomsFromCreatorResponse,
+};
+#[cfg(feature = "tokenfactory")]
+pub use crate::results::TokenFactoryMsg;
 pub use crate::results::{
     attr, wasm_execute, wasm_instantiate, Attribute, BankMsg, ContractResult, CosmosMsg, CustomMsg,
     Empty, Event, QueryResponse, Reply, ReplyOn, Response, SubMsg, SubMsgExecutionResponse,
